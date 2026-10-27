@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getRfqs } from '../api/rfqApi.js';
 import { watchAuction } from '../api/auctionSocket.js';
@@ -14,13 +14,17 @@ export default function AuctionList() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [refreshId, setRefreshId] = useState(0);
   const [connection, setConnection] = useState('connecting');
+  const requestRunning = useRef(false);
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  useEffect(() => watchAuction(null, () => setRefreshId((value) => value + 1), setConnection), []);
+  useEffect(() => watchAuction(null, () => {
+    if (!requestRunning.current) setRefreshId((value) => value + 1);
+  }, setConnection), []);
 
   useEffect(() => {
     document.title = 'Auctions | RFQ Auctions';
     const controller = new AbortController();
+    requestRunning.current = true;
     let boundaryTimer;
     const sentAt = performance.now();
 
@@ -45,12 +49,14 @@ export default function AuctionList() {
       })
       .finally(() => {
         if (!controller.signal.aborted) {
+          requestRunning.current = false;
           setIsLoading(false);
         }
       });
 
     return () => {
       controller.abort();
+      requestRunning.current = false;
       clearTimeout(boundaryTimer);
     };
   }, [refreshId]);
@@ -69,7 +75,7 @@ export default function AuctionList() {
           <p>British auctions and supplier quotes.</p>
         </div>
         <div className="live-actions">
-          <span className="connection-state" role="status">{connection === 'live' ? 'Live updates on' : connection === 'connecting' ? 'Connecting...' : 'Reconnecting · Refresh available'}</span>
+          <span className="connection-state" role="status">{connection === 'polling' ? 'Auto-refresh on' : connection === 'live' ? 'Live updates on' : connection === 'connecting' ? 'Connecting...' : 'Reconnecting · Refresh available'}</span>
           <button className="button" onClick={refresh} disabled={isLoading}>
             {isLoading ? 'Loading...' : 'Refresh'}
           </button>

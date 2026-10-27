@@ -12,6 +12,11 @@ app.disable('x-powered-by');
 app.use(cors({ origin: clientOrigin }));
 app.use(express.json());
 
+app.use('/api', (_req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 app.use('/api/health', healthRoutes);
 app.use('/api/rfqs', rfqRoutes);
 app.use('/api/suppliers', supplierRoutes);

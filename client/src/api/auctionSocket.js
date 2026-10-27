@@ -1,6 +1,18 @@
 import { io } from 'socket.io-client';
 
 export function watchAuction(rfqId, onUpdate, onStatus) {
+  if (import.meta.env.PROD) {
+    onStatus('polling');
+    const refresh = () => { if (!document.hidden) onUpdate(); };
+    const timer = setInterval(refresh, 2000);
+    window.addEventListener('focus', refresh);
+
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('focus', refresh);
+    };
+  }
+
   const socket = io({ autoConnect: false, forceNew: true });
   let stopped = false;
 

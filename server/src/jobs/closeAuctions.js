@@ -1,6 +1,6 @@
 import { closeExpiredAuctions } from '../services/closingService.js';
 
-export async function startAuctionCloser(intervalMs = 1000) {
+export async function startAuctionCloser(intervalMs = 1000, keepAlive = false) {
   await closeExpiredAuctions();
 
   let stopped = false;
@@ -23,13 +23,13 @@ export async function startAuctionCloser(intervalMs = 1000) {
 
       if (!stopped) {
         timer = setTimeout(tick, intervalMs);
-        timer.unref();
+        if (!keepAlive) timer.unref();
       }
     }
   }
 
   timer = setTimeout(tick, intervalMs);
-  timer.unref();
+  if (!keepAlive) timer.unref();
 
   return async function stop() {
     stopped = true;

@@ -38,7 +38,7 @@ export function useAuction(rfqId) {
           getActivities(rfqId, controller.signal),
         ]);
 
-        if (!stopped && !queued) {
+        if (!stopped) {
           setState({ rfq: details.rfq, rankings: bids.rankings, history: bids.history, activities: activity.activities, clock, isLoading: false, error: '' });
           setNow(getServerNow(clock, performance.now()));
         }

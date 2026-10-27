@@ -63,6 +63,8 @@ Vite forwards `/api` requests and `/socket.io` connections to Express. If port 4
 
 ## Commands
 
+For hosting the frontend, API, and closing worker in one Vercel project, see the [deployment guide](docs/deployment.md). PostgreSQL is connected through Vercel's Neon integration. Production builds use two-second auto-refresh; local development uses Socket.IO.
+
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Run the client and server together |

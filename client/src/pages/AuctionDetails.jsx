@@ -42,7 +42,7 @@ function Auction({ rfqId }) {
           <div className="page-heading page-heading--actions">
             <div><h1>{rfq.name}</h1><p>{rfq.referenceId}</p></div>
             <div className="live-actions">
-              <span className="connection-state" role="status">{connection === 'live' ? 'Live updates on' : connection === 'connecting' ? 'Connecting...' : 'Reconnecting · Refresh available'}</span>
+              <span className="connection-state" role="status">{connection === 'polling' ? 'Auto-refresh on' : connection === 'live' ? 'Live updates on' : connection === 'connecting' ? 'Connecting...' : 'Reconnecting · Refresh available'}</span>
               <button className="button" onClick={refresh}>Refresh</button>
             </div>
           </div>

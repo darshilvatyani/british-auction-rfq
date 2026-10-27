@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["iad1"],
+  "services": {
+    "web": {
+      "root": "client",
+      "framework": "vite",
+      "installCommand": "cd .. && npm ci",
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist",
+      "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+    },
+    "api": {
+      "root": "server",
+      "framework": "express",
+      "entrypoint": "src/vercel.js",
+      "installCommand": "cd .. && npm ci",
+      "buildCommand": "npm run db:migrate && npm run db:seed"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": { "service": "api" } },
+    { "source": "/:path*", "destination": { "service": "web" } }
+  ],
+  "daemons": {
+    "auction-closer": {
+      "root": ".",
+      "entrypoint": "server/Dockerfile.closer",
+      "instances": { "iad1": 1 }
+    }
+  }
+}

@@ -7,7 +7,7 @@ if (!databaseUrl) {
 
 const pool = new pg.Pool({
   connectionString: databaseUrl,
-  max: 10,
+  max: process.env.VERCEL ? 3 : 10,
   connectionTimeoutMillis: 5000,
   idleTimeoutMillis: 30000,
 });
