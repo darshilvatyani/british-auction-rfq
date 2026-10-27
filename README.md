@@ -9,6 +9,9 @@ A request-for-quotation application with British Auction bidding. Buyers create 
 - PostgreSQL with the `pg` driver
 - Socket.IO for live auction updates
 
+The British Auction RFQ application is deployed on Vercel.
+Link - https://british-auction-rfq-dusky.vercel.app/rfqs
+
 ## High-level design
 
 ```mermaid
