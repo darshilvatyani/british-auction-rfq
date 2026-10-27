@@ -19,9 +19,19 @@
     }
   },
   "rewrites": [
-    { "source": "/api/:path*", "destination": { "service": "api" } },
-    { "source": "/:path*", "destination": { "service": "web" } }
-  ],
+  {
+    "source": "/api/:path*",
+    "destination": { "service": "api" }
+  },
+  {
+    "source": "/",
+    "destination": "/index.html"
+  },
+  {
+    "source": "/:path*",
+    "destination": { "service": "web" }
+  }
+],
   "daemons": {
     "auction-closer": {
       "root": ".",
